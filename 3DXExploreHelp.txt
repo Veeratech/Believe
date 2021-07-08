@@ -1,0 +1,564 @@
+There are two types of license keys:
+
+CPF (ENOVIA Live Collaboration) license key provides access for the licensed users to access the ENOVIA Collaboration Platform (CPF) and the licensed products for the production environment. The key(s) are acquired for the application server(s) designated to support the licensed users; that is, one application server will require one license key, four application servers will require four keys.
+
+DTE (ENOVIA Development and Test) license is intended to support the CPF production environment to create and test system configurations and/or customizations before deploying the changes into production. Some customers also choose to set up additional, independent DTE environments for end user training, scale testing, etc. Each of these additional environments must be licensed as a DTE system license. A DTE key is acquired for each application server or standalone machine designated to support each DTE environment.
+
+
+
+https://fcscalifornia.19x.nasa.group.atlascopco.com/fcs/servlet/fcs/about
+
+
+
+
+What causes the following error message: Server failed to create/checkout working set. How to fix applet not loaded error message.
+ANSWER	
+There are multiple reasons for this error:
+
+Applet only runs if you install and enable JRE.
+Working set file is corrupt or FCS configuration is not working.
+Pop-up windows not enabled.
+Mismatch of downloaded Jars and IEF client version.
+HTTP header size sent to server with login request exceeds maximum header size.
+Applet Only Runs if You Install and Enable JRE
+The applet only runs if you install and enable JRE. Install a supported version of JRE. You can find the list of compatible JRE versions in the Program Directory for your platform software level.
+
+Working Set File is Corrupt or FCS Configuration is Not Working 
+Correct the FCS configuration.
+Delete the Local Configuration Object (LCO) if required. For example, delete the LCO  if the working set file is corrupt and you cannot retrieve it.
+An administrator can delete the Local Configuration Object (LCO) for any user. However, it also deletes the working set file checked into the LCO. Be careful when you do this.
+When the user logs in, the LCO recreates if required. Do not manually create the LCO.
+Pop-up Windows Not Enabled 
+If you do not enable pop-up windows, it causes an issue with permission pop-up windows, and blocks the applet from running. Each browser has its own way of managing the pop-up blocker. See the browser help for more information about your specific browser.
+
+Mismatch of Downloaded Jars and IEF Client Version
+See QA00000058868 and QA00000023199.  Clear the Java cache with the option to delete downloaded files selected.
+
+HTTP Header Size Sent to Server with Login Request Exceeds Maximum Header Size
+The communication breaks if the HTTP header size sent to the server with the login request exceeds the maximum header size. The MCAD Applet does not load.
+
+Change maxHttpHeaderSize value in the server.xml from the default value of 8192 to  a higher value such as 65536 as shown below:
+
+ 
+<Connector port="8080" protocol="HTTP/1.1" 
+               connectionTimeout="20000" URIEncoding="UTF-8" 
+                           maxHttpHeaderSize="65536" 
+                           maxPostSize="67108864" 
+               redirectPort="8443" xpoweredBy="false" server="Apache TomEE" / > 
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+			   
+	
+How to create/update Local Configuration Object (LCO)  for the  Applet Free UI ?
+
+ 
+Please note that this is a workaround.
+
+It is suggested since currently in 2019x FD05 /2020x GA - functions to assign integrations and to update LOC values is missing or not working as expected.
+
+Only option possible for applet free UI  is to create the object and update the values via MQL.
+
+ 
+
+Option 1 - Admin Machine Exception
+
+Reserve an admin machine for integration assignments. This machine will have supported IE version and jre installed. Seek any exceptions from IT Policy for that machine only if needed
+
+ 
+
+This is only one machine used with standard applet based UI – as against all user machines/workstations that can use Applet based UI.
+For this :  you can set attribute IEF-AppletFreeUI to FALSE for the admin user. This overrides the server setting and lets single/specific user access applet based UI.
+ 
+
+ 
+
+Option2 – Use MQL export/import  with pre-saved templates for LCOs
+
+  Steps  for create :
+
+Export a specific template from current production system. This is a existing LCO for a user having same integrations assigned as new user (without working set file which applies to specific user)
+Mql > export bus  T N R  into file  <filepath >\filename.exp;                                                                                       e.g. export businessobject MCADInteg-LocalConfig j174 TEAM   into file  c:/temp/exported_template_LCO.exp;                                                                                                                                                                                             
+
+Update the name within template to match new user name ( everywhere within the export as needed).
+ Import this LCO
+ 
+
+Mql > import  bus  T N R  overwrite from file  <filepath >\filename.exp;            where N stands for new user’s name.
+
+      e.g. import businessobject MCADInteg-LocalConfig TestUser1 TEAM   overwrite from file  c:/temp/exported_template_LCO.exp; 
+
+ 
+
+Steps  for update  :
+
+Export the LCO to be updated.
+Mql > export bus  T N R  into file  <filepath >\filename.exp;            where N stands for user’s name.
+ 
+
+Edit file to make changes.
+Import updated LCO.
+Mql > import  bus  T N R  overwrite from file  <filepath >\filename.exp;     where N stands for user’s name
+
+
+
+	
+When installing the CATIA V5 associative interface for Abaqus (CAI) I am receiving the following error message:
+
+“No CATIA V5 installation of release Rxxx were found on your system”
+
+How do I solve the problem?
+ANSWER	
+The error is produced when the installer queries the Windows registry for the appropriate CATIA V5 installation location, but no CATIA V5 installation is found for the required level. One of the steps during CAI installation is to detect the CATIA V5 release and Service Pack levels currently installed. The installer executes CATIA CATVersion.exe utility to accomplish this task.
+
+Example output:
+
+C:\Temp
+   >"C:\Program Files\Dassault Systemes\B26\win_b64\code\bin\CATVersion.exe"
+GALevel: B26, SPLevel: 1
+If the required CATIA V5 version has been installed in the local machine, then the CATIA installation path will be found in the Windows registry, under the key value in "HKLM\SOFTWARE\Dassault Systemes\Bxx\0\DEST_FOLDER REG_SZ" 
+
+Where Bxx is the CATIA Internal eval expr count=true on temp query bus Security* * * where "attribute[Title].value!=''"; number.
+
+For example:
+
+C:\temp >reg query "HKLM\software\Dassault Systemes\B26"
+HKEY_LOCAL_MACHINE\software\Dassault Systemes\B26\0
+DEST_FOLDER    REG_SZ    C:\Program Files\Dassault Systemes\B26
+DEST_FOLDER_OSDS    REG_SZ    C:\Program Files\Dassault Systemes\B26\win_b64
+OSNAME    REG_SZ    WIN64
+IDENT    REG_SZ
+If the required level is not installed, then you need to install CATIA first before proceeding with the CAI product install.  CATIA V5 is a required prerequisite for these products and must be installed first. 
+
+In some cases the required level is already installed, but not found.  This can happen when CATIA was installed by a non-standard process, and the Windows registry was not updated.  Both of the above queries will report an error. The workaround in this case is to add the missing registry entries required for CAI product install detection. This workaround requires access to a machine where CATIA has been installed using the standard procedure method.  Do the following:
+
+On the machine where a standard CATIA installation has been performed, export the CATIA registry keys using the following command:
+reg export "HKLM\SOFTWARE\Dassault Systemes\Bxx"  v5.reg
+Where Bxx is the CATIA Internal release number required for the CAI product (example B26).
+
+Note that the output file v5.reg is in simple text format and may be edited using any text editor such as notepad. You can edit the registry output file using right-click and select Edit.
+
+Copy the v5.reg to the target machine that is missing the registry entries.  
+
+Import the registry key file on the machine where you need to perform the CAI install:
+
+             reg import v5.reg
+
+Note:  Official support is available only from software installed using the standard method.
+
+Continue with the CAI install procedure.
+Notes:
+
+If CATIA V5 was installed into a network file server location, only the machine that performed the original install will have the appropriate CATIA Windows registry entries.  It is recommended to use the same machine when installing CAI into the same network file server.
+
+CATIA Internal release mapping table:
+
+B31 = V5-6R2021
+
+B30 = V5-6R2020
+
+B29 = V5-6R2019
+
+B28 = V5-6R2018
+
+B27 = V5-6R2017
+
+B26 = V5-6R2016
+
+B25 = V5-6R2015
+
+B24 = V5-6R2014
+
+B23 = V5-6R2013
+
+B22 = V5-6R2012
+
+B21 = V5 R21			   
+
+
+
+
+https://media.3ds.com/support/progdir/all/?pdir=v5,r2013,sp6&context=all&sub=.%5Cportfolio%5Ccp_pre.html
+
+
+
+3DSpace provides the backbone for the 3DEXPERIENCE platform. 3DSpace is the underlying support for all ENOVIA apps and other Dassault Systemes apps for Product Lifecycle Management, which include native apps from CATIA, 3DLive, SIMULIA, and DELMIA product lines. It comprises the following end-user software components:
+
+3DSpace Service, which is a Java/RMI-based business object server. The Matrix Query Language (MQL ) command line executable is included with the server for the purpose of system installation and data/file storage setup functions only. If any other schema configurations are needed, Studio Modeling Native Apps must be licensed. Note that if distributed file stores are created with Sites and Locations, one or more ENOVIA File Collaboration Server licenses may also be needed. This is installed from CD 2: 3DSpace - Web Server.
+Collaboration and Approvals, include the capabilities from the Application Exchange Framework, Common Components, Team Central apps. This is installed from CD 3: 3DSpace - Business Process Services.
+The following administrative add-on is also available:
+
+Studio Modeling Native Apps (DMP ) provides the development tools for a company to define and test configurations that are needed in their production system.
+Users of Studio Modeling Native Apps must be valid licensees of the apps that are configured and tested. However, a user's production license can also be used with the system installed for Studio Modeling Native Apps. The Studio Modeling Native Apps includes the following primary tool:
+
+MQL - the command line interface tool for executing commands and scripts.
+Studio Federation Toolkit (ADT ), which provides documentation and examples for writing custom programs that use the Adaplet libraries available in 3DSpace.The Studio Federation Toolkit must be licensed for each Studio Modeling Native Apps environment that requires development of custom connectors with the Adaplet APIs.
+Studio Customization Toolkit (ADV ), which provides documentation and examples for writing custom programs and support web services client development. The Studio Customization Toolkit must be licensed for each Studio Modeling Native Apps environment that requires development of custom programming to change or extend standard ENOVIA capabilities.
+File Collaboration Server (FCS ), which enables administrators to distribute file data across the enterprise for optimal upload and download performance. A system license is required for each physical site that requires remote file storage. There is no limit to the number of users that can use the File Collaboration Server at a given licensed site, however, all of these users must be licensed to use 3DSpace, which is the prerequisite.
+This guide describes how to perform the following administration tasks for customizing your 3DSpace system:
+
+Configuring 3DSpace. You can set environment variables according to your system needs. See "Configuring 3DSpace Service".
+Integrating LDAP with external authentication tools. You can control web user access to the 3DSpace Service. See "Integrating LDAP with External Authentication Tools".
+Configuring language. You can configure languages settings for these component: Collaboration and Approvals. See "Language Support".
+Configuring a Japanese Web environment. You can configure and deploy the 3DSpace Service in Japanese. See "Configuring a Japanese Web Environment".
+
+
+
+CATIA V5R20 CRACK
+
+https://mega.nz/file/Sc5R3R6J#FTW0StD2JfDuZtmM0pDaAk9m5r1OI3_bqjTy1reviDw
+
+
+
+Autvue Servelet Connection Validation 
+
+https://veera.2019x.com/3dspace/VueServlet
+
+Autvue Error - https://null:443/3dspace/servlet/C3DControllerServlet
+
+xpected Result: File to be viewed in AutoVue.
+
+
+Solution:
+
+This is a very generic error and can be due to different reasons, to start with, we can check the following points:
+1. Firstly, check the context.xml located at apache-tomee-plus-1.x.x\conf for all the instances of MCS and FCS and if it has been updated with the below:
+<Context useHttpOnly="false" >
+
+
+2. If the context.xml entry is correct and if the below entry in observed in the AutoVue Server logs where the hostname is observed as "null" then follow the below configuration:
+
+*****************************************
+
+<log4j:throwable > <![CDATA*com.cimmetry.core.VueRemoteException: Invalid document identifier: DocID: 11, URL: 4480.45792.10448.59997~generic~abc.txt, DMS Info: <vuelink url="https://null:443/3dspace/servlet/C3DControllerServlet" > <!-- DMS Args and seed are omitted -- > </vuelink >, DMS ID: null, Name: null  Display Name: null, Type: 0, Parent: [null]
+
+*****************************************
+
+If the issue is still occurring then check the below:
+
+With respect to Windows Server, when more than one service has been installed on the same machine, a loop issue may occur resulting in the mentioned error. To avoid this, add the below line in the 3DSpace_httpd_fragment.conf file:
+
+RequestHeader  set  x-forwarded-hostname “punvmwin.dsone.3ds.com”
+
+After this, the Apache Service needs to be restarted.
+
+NOTE: The hostname entry should be the name used in the URL that is hit to login to 3DSpace
+
+3. If the above points are correctly set and if the error is still occurring then check QA00000044397. The issue can also be related to handshake failure as described in the referred QA.
+
+
+
+
+
+
+
+
+	Resolving error “Initialization failed. Exception when trying to execute channel requests”
+	
+	
+	
+		
+After configuring AutoVue web viewer in SmarTeam, sometimes we encounter the following error message in the WebEditor:
+
+error message
+
+ 
+
+This can be due to the fact that Variable jvueserver.authentication.enable=false is not set in jvueserver.properties file.
+
+1. Before doing above changes please stop AutoVue Server.
+
+2. Please open jvueserver.properties file and add jvueserver.authentication.enable=false and save it.
+
+3. Once above change has been done please clear cache and restart AutoVue server.
+
+Above setting is applicable for AutoVue versions 20.2.2, 20.2.3 and 21.0.0
+
+
+
+
+Cannot use AutoVue Viewer. Receive the java invalid stream header error popup when trying to view a file in Autovue.
+
+https://kb.dsxclient.3ds.com/mashup-ui/page/resultqa?from=search%3fq%3d%2binvalid%2bstream%2bheader&id=QA00000040557e&q=%20invalid%20stream%20header
+
+This indicates that SSl was turned on during the Autovue server installation but not set up. If you are not using SSl then in the Autovue server bin install directory edit the jvueserver.properties and comment out the line
+
+jvueserver.ssl.enable=true
+
+restart the Autovue server
+
+
+
+File Not found
+
+java.net.MalformedURLException: no protocol: 33826.31786.9201.53173~generic~Issues%20to%20Test.xlsx
+	at java.net.URL.<init>(Unknown Source)
+	at java.net.URL.<init>(Unknown Source)
+	at java.net.URL.<init>(Unknown Source)
+	at com.cimmetry.jvueserver.UrlConnectionDownloader.getConnection(Unknown Source)
+	at com.cimmetry.jvueserver.UrlConnectionDownloader.getRemoteFileInfo(Unknown Source)
+	at com.cimmetry.jvueserver.NativeDataSource.queryRemoteFileInfo(Unknow
+	
+	
+https://kb.dsxclient.3ds.com/mashup-ui/page/resultqa?from=search%3fq%3dAutovue%2bfile%2bnot%2bfound&id=QA00000056539e&q=Autovue%20file%20not%20found	
+		
+Scenario:
+1) Login to WebUI.
+2) Search for a Document.
+3) Go in file section.
+4) Click on the eye icon (AutoVue Viewer) in the action column.
+
+Result: Error, "File Not Found","MalformedURLException".
+
+File not found error
+
+Expected Result: File to be viewed in AutoVue.
+
+
+Solution:
+
+This is a very generic error and can be due to different reasons, to start with, we can check the following points:
+1. Firstly, check the context.xml located at apache-tomee-plus-1.x.x\conf for all the instances of MCS and FCS and if it has been updated with the below:
+<Context useHttpOnly="false" >
+
+
+2. If the context.xml entry is correct and if the below entry in observed in the AutoVue Server logs where the hostname is observed as "null" then follow the below configuration:
+
+*****************************************
+
+<log4j:throwable > <![CDATA*com.cimmetry.core.VueRemoteException: Invalid document identifier: DocID: 11, URL: 4480.45792.10448.59997~generic~abc.txt, DMS Info: <vuelink url="https://null:443/3dspace/servlet/C3DControllerServlet" > <!-- DMS Args and seed are omitted -- > </vuelink >, DMS ID: null, Name: null  Display Name: null, Type: 0, Parent: [null]
+
+*****************************************
+
+If the issue is still occurring then check the below:
+
+With respect to Windows Server, when more than one service has been installed on the same machine, a loop issue may occur resulting in the mentioned error. To avoid this, add the below line in the 3DSpace_httpd_fragment.conf file:
+
+RequestHeader  set  x-forwarded-hostname “punvmwin.dsone.3ds.com”
+
+After this, the Apache Service needs to be restarted.
+
+NOTE: The hostname entry should be the name used in the URL that is hit to login to 3DSpace
+
+3. If the above points are correctly set and if the error is still occurring then check QA00000044397. The issue can also be related to handshake failure as described in the referred QA.
+
+
+
+when opening an Object in AutoVue receive a popup error File not found and when opened for details see  java.net.MalformedURLException: no protocol: ...
+ANSWER	
+Edit the C3DApplet.jsp to hard code my application server path for the cd3servlet concatenation.
+Change:
+//String path = ENOVIFUtil.GetURLUpToContextPathFrmRequest(request);
+
+To:
+
+String path = "https://3dspace.ds.com/3dspace";
+where 3dspace.ds.com is your application name
+
+Import the Root certificate used during  3DExpeirence 2016X installation into the AutoVue JRE keystore.      Example:                                                                                                                                 Java Install Directory >\bin >keytool -import -alias <servername > -file c:\certs.cer -trustcacerts -v -keystore C:\Oracle\AutoVue\jre\lib\security\cacerts
+
+Completely turn off UAC on server 2012R2.  Otherwise cannot write into the AutoVue cacerts.
+
+
+User Management Queries about LDAP & 3Dpassport
+=====================================================
+If user needs to Configure LDAP with 3DEXPERIENCE R2016x level, then he may have the following questions.
+
+Question 1:
+Company may have number of users in their Active Directory (AD) however Administrator does not want to allow all users to access the 3DEXPERIENCE Platform. How to restrict the access of 3DEXPERIENCE Platform to only set of users?
+Answer:
+Users can either be created manually in 3DPassport (if you enable user to create account) or only created in AD. User has the option “create an account” in login GUI to create account in passport and then user needs to create same account in 3DSapce as well. (Please refer to Documentation at Installation and Administration | 3DEXPERIENCE Platform | 3DEXPERIENCE Platform - Installation | 3DPassport Installation | Post-Installation | Creating End User Passport Data Manually in the Local Database)
+If users are in Active Directory, they don’t need to be “created” in 3DPassport. At first login, 3DPassport will retrieve the user attributes from AD and will synchronize them in 3DPassport. You can choose to store these attributes in 3DPassport DB or not, it will depend on your security policy. If you don’t store them in 3DPassport, they will be retrieved from AD each time the user logs in.
+To allow specific users to access the Platform, Administrator should create only set of users in 3DSpace which should give access to platform.
+Note that all users from Active Directory will be able to authenticate (through 3dPassport & LDAP), however all user won’t have access to 3DEXPERIENCE platform unless they have been properly declared in 3DSpace P &O.
+
+Question 2:
+If company has multiple Repositories, e.g. sqldb (which is created by default after 3DPassport is installed) and a LDAP Repository.
+Now If Administrator wants to create a new account, where should he specify the repository?
+Answer:
+SQLDB is the default technical repository. When you create an account, it is always created by default in this repository. If you configure another repository such as LDAP, you can configure it to allow user account creation/update or not. If so, when new account will be created through 3DPassport, they will be stored in both SQLDB and LDAP.
+
+Question 3:
+Can a Company Administrator create multiple SQL repositories in the 3DPassport? Let’s say, separate for Vendor.
+Answer:
+Yes it is possible, but the data model to store user data will be the same as the one used in 3DPassport schema.
+
+Question 4:
+Can a Company has a same user (with user id) in two different repositories?  This is a question because two repositories are being maintained in two separate DB. If it is possible, how 3DPassport will authenticate the user if there are multiple repositories?
+Answer:
+Yes you can have a same user (with user id) in two different repositories even if it is not recommended for security reasons (unless the user account has the same owner). If you have an account with the same username/email stored in two different repositories, possibly with different password, you can authenticate on 3DPassport using these accounts.
+The authentication is successful if at least one repository is able to validate the credentials.
+About the user attributes, they will be the result of the merge of attributes retrieved from all repositories based on the configured order. The last repository in the list for GET operation will overwrite the value of all other attributes retrieved from previous repositories.
+
+
+UPDATE REGISTEREDSERVICEIMPL SET SERVICEID=REPLACE(SERVICEID,'null',' https://**.dev2020x.techveda.com:**/**') WHERE SERVICEID LIKE '%null%';)  
+
+
+http://**.3dexperience.cn:**/**
+
+
+https://**.dev2020x.techveda.com:**/**
+
+https://dev2020x.techveda.com/
+
+
+
+INSERT INTO passtkdb_20xTest.passtkdb_20xTest.RegisteredServiceImpl VALUES (value1, value2, value3, ...);
+
+
+UPDATE passtkdb_20xTest.passtkdb_20xTest.RegisteredServiceImpl SET serviceId=REPLACE(serviceId,'null',' https://**.dev2020x.techveda.com:**/**')
+
+
+INSERT INTO Customers (id, allowedToProxy, anonymousAccess, enabled, evaluation_order, ignoreAttributes,) VALUES ('40', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
+
+
+http(s)?://.*.2020x.com(:\d+)?((/.*)?|(\?.*))
+
+http(s)?://.*.techveda.com(:\d+)?((/.*)?|(\?.*))
+
+UPDATE passdb_20xTest.passdb_20xTest.iam_config SET ds_value = 'http(s)?://.*.techveda.com(:\d+)?((/.*)?|(\?.*))' WHERE ds_id==379;
+
+Error while executing CREATE TABLE iam_lock ( id int NULL DEFAULT NULL ) org.hibernate.exception.SQLGrammarException: could not execute statement at org.hibernate.exception.internal.SQLStateConversionDelega
+
+
+modify bus OBJECTID add ownership "MyCompany" "MyProject" for "ownership”;
+modify bus OBJECTID add ownership "Supplier1" "MyProject" for "Project Applicability";
+modify bus OBJECTID add ownership "Supplier2" "MyProject" as show,read,checkout;
+modify bus OBJECTID remove ownership "Supplier1" "MyProject" for "Project Applicability";
+
+
+akscellenceinfo
+
+
+[5:10 PM] Paul Willis (Guest)
+    c:\users\{​username}​\mxpro_logs
+​[5:14 PM] Paul Willis (Guest)
+    c:\users\{​username}​\ief\logs
+​[5:17 PM] Paul Willis (Guest)
+    
+mod bus MCADInteg-LocalConfig {​​​username}​​​ TEAM IEF-AppletFreeUI false;
+Notes:
+
+Installation of X-CAD Design Management after Integration Exchange Framework installation is not allowed since Integration Exchange Framework installs files in the <Server Apps>\DesignerCentral folder. Before starting X-CAD Design Management installation, rename the existing DesignerCentral folder. Integration Exchange Framework is included in the X-CAD Design Management installation and a separate IEF installation is not required before or after X-CAD Design Management installation.
+X-CAD Design Management baseline behavior schema is installed based on the existence of certain roles. Since these roles are installed by Collaboration and Approvals the baseline behavior Schema from X-CAD Design Management is also installed. The installed schema is used only in baseline behavior environment.
+
+
+
+	
+What is a bootstrap?
+A bootstrap is a file that allows Matrix one applications to connect to a database
+
+How to create a bootstrap?
+
+C:\ ENOVIA_HOME \win_b64\code\bin>mql -install -user DBUSER -password DBPASSWORD -host " CONNECTSTRING" -driver 'MSSQL/ODBC'
+
+
+
+businessobject DRLTools Processor System Queue Object e340e2a8-5dd6-4bb9-ac01-925064f16595 Drawing, drw-77416364-00000005, A.1
+    originated = 6/24/2020 1:12:37 PM
+    id = 46889.12320.50898.38454
+businessobject Drawing drw-77416364-00000005 A.1
+    originated = 6/24/2020 1:12:25 PM
+    id = 22472.55032.32496.65515
+businessobject VPMReference prd-77416364-00000011 A.1
+    originated = 6/24/2020 1:12:27 PM
+    id = 22472.55032.32497.2188
+businessobject VPMReference prd-77416364-00000012 A.1
+    originated = 6/24/2020 1:12:27 PM
+    id = 22472.55032.32497.5941
+businessobject VPMReference prd-77416364-00000013 A.1
+    originated = 6/24/2020 1:12:27 PM
+    id = 22472.55032.32497.7849
+businessobject VPMReference prd-77416364-00000014 A.1
+    originated = 6/24/2020 1:12:27 PM
+    id = 22472.55032.32497.11141
+businessobject VPMReference prd-77416364-00000015 A.1
+    originated = 6/24/2020 1:12:27 PM
+    id = 22472.55032.32497.13957
+businessobject 3DShape 3sh-77416364-00000006 A.1
+    originated = 6/24/2020 1:12:28 PM
+    id = 22472.55032.32497.14185
+businessobject 3DShape 3sh-77416364-00000007 A.1
+    originated = 6/24/2020 1:12:28 PM
+    id = 22472.55032.32497.17816
+businessobject 3DShape 3sh-77416364-00000008 A.1
+    originated = 6/24/2020 1:12:28 PM
+    id = 22472.55032.32497.21398
+businessobject 3DShape 3sh-77416364-00000009 A.1
+    originated = 6/24/2020 1:12:28 PM
+    id = 22472.55032.32497.24221
+businessobject 3DShape 3sh-77416364-00000010 A.1
+    originated = 6/24/2020 1:12:28 PM
+    id = 22472.55032.32497.26252
+businessobject VPMReference prd-77416364-00000016 A.1
+    originated = 6/24/2020 1:12:30 PM
+    id = 22472.55032.32497.26824
+businessobject XCADAssemblyRepReference 1579A3366FA049E8B316BA0A7A01BFCB ---.000
+    originated = 6/24/2020 1:12:31 PM
+    id = 22472.55032.32497.30305
+	
+	
+	A checksum is a value used to verify the integrity of a file or a data transfer. In other words, it is a sum that checks the validity of data.
+	
+	
+
+
+The Milestones page for a project lists all of the milestones and allows a Configuration Manager or Product Manager to edit the discipline.
+
+The Production Phase lifecycle defines the process for creating, reviewing, and releasing parts. The Designer or Senior Designer can create parts with the Production release phase.
+
+
+A part is processed by moving it through its lifecycle states.Only the part's owner or co-owner can change its state.	 An Engineering Bill of Material is created and connected to the part, specifying how the part is to be created. The part owner then promotes the part to the next state to send it to internal reviewers. When the review process is complete, the part is promoted to the Release state.
+If the part is in a route, the route may be set up to prevent the part from being promoted until the route is complete.
+
+General Lifecycle Rules for Production Phase Parts
+
+
+The Responsible Manufacturing Engineer reviews and approves the part in the Frozen state. The review should include the parts attributes, Bill of Materials, and drawing print.
+
+
+1. Open you enovia.ini file in LOADPOINT\3DSpace\win_b64\code\bin         (example:    C:\DassaultSystemes\R2020x\3DSpace\win_b64\code\bin\enovia.ini ) 
+2. Modify the MX_JAVA_OPTIONS setting to include -Djava.locale.providers=COMPAT 
+For example it should look something like: 
+MX_JAVA_OPTIONS = -Xmx2048m -Djava.locale.providers=COMPAT 
+3. Save the changes 
+4. Restart the services
+
+
+After the part enters the Approved state, all proposed changes connected to the part's CA are checked whether they are also in the Approved state.
+
+
+
+	
+Scenario: 
+* Open CATIA V5 using the connector for Catia V5 
+* Create a part and save it on the cloud 
+* In the web platform search the created model 
+* Open it in Collaborative lifecycle widget 
+* Change the maturity to RELEASED 
+* Open change action widget and create a new CA
+* add the the RELEASED model to the CA object 
+* Switch the CA maturity to In Work (a new In Work model will be created)
+* open the revised model in CATIA V5 using the connector for Catia V5 
+* modify it and Save 
+--> Save - Server Error : Error while updating Object/s: No 'modify' access on Attribute 'V_PSMappingTable'
+CLOSURE	
+the new revision of the object to be modified has been created through Change process, hence it is automatically set as "Change Controlled". 
+Once an object is "change controlled", all the modifications should be made with the related Change Action so as to track the modifications. 
+
+hence, user needs to set Change Action in CATIA V5 session so that modification propagated through 3DEXPERIENCE Save will be made under the related Change Action
+
+
+
+
+
+	

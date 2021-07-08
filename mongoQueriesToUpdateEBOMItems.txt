@@ -1,0 +1,282 @@
+Folder
+EBOM_Item
+QN Operation
+
+
+db.getCollection('MigrationData').find({"values.Do Not Migrate":"True","type":"EBOM_Item","stage":"PROCESSED_DATA"}).count()
+29932
+
+db.getCollection('MigrationData').find({"values.IsDeleted":"True",type:"EBOM_Item"}).count()
+468
+
+#Query to get the count of isDeleted true
+==========================================
+db.getCollection('MigrationData').find({"values.IsDeleted":"True",stage:{$ne:"PROCESSED_DATA"}}).count()
+
+db.getCollection('MigrationData').update({"values.IsDeleted":"True",stage:{$ne:"PROCESSED_DATA"}}, {$set: {'stage': 'PROCESSED_DATA', 'status':"complete"}}, {multi: true})
+
+
+
+db.getCollection('MigrationData').find({"values.Do Not Migrate":"True",status:{$ne:"complete"},stage:{$ne:"PROCESSED_DATA"},).count()
+db.getCollection('MigrationData').find({"values.Do Not Migrate":"True").count()
+30078
+146
+
+db.getCollection('MigrationData').update({"values.Do Not Migrate":"True",stage:{$ne:"PROCESSED_DATA"}}, {$set: {'stage': 'PROCESSED_DATA', 'status':"complete"}}, {multi: true})
+
+#EBOM_Item that are not processed complete
+db.getCollection('MigrationData').find({"type":"EBOM_Item",status:{$ne:"complete"},stage:{$ne:"PROCESSED_DATA"}}).count()
+24188
+db.getCollection('MigrationData').find({"type":"EBOM_Item",status:{$ne:"complete"},stage:{$ne:"PROCESSED_DATA"}}).count()
+22082
+
+db.getCollection('MigrationData').find({"type":"EBOM_Item",status:{$ne:"complete"},stage:{$ne:"PROCESSED_DATA"},"stage":"PROCESS_DATA"}).count()
+
+20144
+
+
+db.getCollection('MigrationData').find({"type":"EBOM_Item",status:{$ne:"complete"},stage:{$ne:"PROCESSED_DATA"},"stage":"EXPORT_DATA_FROM_SMARTEAM"}).count()
+1952
+
+
+#Folder not PROCESSED_DATA
+
+db.getCollection('MigrationData').find({"type":"Folder",status:{$ne:"complete"},stage:{$ne:"PROCESSED_DATA"}}).count()
+
+
+No_Existend_Report
+
+
+
+genereateEBOMNotExistantIn3DX
+
+"Type,Name,Revision,Current,Owner,ObjectId,ExistIn3DEXP,stage,status,IsExported"
+
+
+
+db.inventory.find( {
+    $and: [
+        { $or: [ { type: { $ne : "Inventor Drawing" } }, { type: { $ne: "Inventor Part" } },{ type: { $ne: "Inventor Assembly" } } ] },
+        { $or: [ { sale: true }, { price : { $lt : 5 } } ] }
+    ]
+} )
+
+
+
+db.getCollection('MigrationData').count({ $and: [ { $and: [ { stage: "PROCESS_INVENTOR" }, { status : "waiting" } ] }, {$and: [ { type: { $ne : "Inventor Drawing" } }, { type: { $ne: "Inventor Part" } },{ type: { $ne: "Inventor Assembly" } } ]}] })
+db.getCollection('MigrationData').count({"stage":"PROCESS_INVENTOR",type:{$ne:"Inventor Part"},type:{$ne:"Inventor Assembly"},type:{$ne:"Inventor Drawing"}})
+
+
+
+db.getCollection('MigrationData').count({ $and: [ { $and: [ { stage: "PROCESS_DATA" }, { status : "waiting" } ] }, {$and: [ { type: { $ne : "Inventor Drawing" } }, { type: { $ne: "Inventor Part" } },{ type: { $ne: "Inventor Assembly" } } ]}] })
+
+
+db.getCollection('MigrationData').count({type:{$nin:[ "Inventor Drawing", "Inventor Part","Inventor Assembly","Folder","EBOM_Item","QN Operation" ] } ,stage:"PROCESS_DATA"})
+db.getCollection('MigrationData').find({type:{$nin:[ "Inventor Drawing", "Inventor Part","Inventor Assembly","Folder","EBOM_Item","QN Operation","Inventor Presentation","DN Operation" ] } ,stage:"PROCESS_DATA"})
+
+
+
+db.getCollection('MigrationData').find({type:/Inventor/,"sourceObjects.current":"Checked In"})
+
+
+db.getCollection('MigrationData').update({name: '1320321126-M1'}, {$set: {processor: null,'processedTime':null}}, {multi: true})
+db.getCollection('MigrationData').update({name: '1320819001-M1'}, {$set: {processor: null,'processedTime':null}}, {multi: true})
+
+
+
+db.getCollection('MigrationData').remove({
+    stage: {$in: ['EXPORT_DATA_FROM_SMARTEAM1','CHECK_CAD_DEPENDENCIES1','CHECK_DATA1']}
+    })
+	
+db.getCollection('MigrationData').find(
+{"stage":"PROCESSED_DATA","importObjects.relationships.type":"Associated Drawing",type:"Inventor Assembly",status:"complete"})
+
+	
+#Query to created DB Index
+=========================
+db.MigrationData.createIndex( { 'importObjects.mappings.name': 1, 'importObjects.mappings.type': 1, 'importObjects.mappings.revision': 1, 'importObjects.mappings.mappingKey': 1 }, {name: 'name_type_revision_mappingKey', background: true})
+
+
+
+db.getCollection('DataImportRelationshipSettings').find({"IndexAttributes":{$ne: null }})	
+
+
+
+db.getCollection('MigrationData').count({"name":/.DRW/})
+
+
+#Query to check the ImportedObjects with certen Relationship Types
+db.getCollection('MigrationData').count({"importedObjects.imported.relationships.type":{ $in:["Associated Drawing","ProEDependency","ProEMerged","ProEFormat"]}})
+
+
+db.getCollection('MigrationData').update({name: '1320711073-M1'}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting"}}, {multi: true})	
+
+db.getCollection('MigrationData').count({stage:"PROCESSED_DATA","values.skippedRelsAsMainConnectedToObject":"True"})
+
+db.getCollection('MigrationData').count({stage:"PROCESSED_DATA","values.skippedRelsAsMainConnectedToObject":"True"})
+15365
+
+
+db.getCollection('MigrationData').aggregate([
+{$match: {stage:"PROCESSED_DATA","type":"ProE Assembly"}},
+{$project: {level: 1, name: 1, type: 1}},
+{$sort : {level: -1}},
+],
+{allowDiskUse: true}
+)
+
+
+
+
+db.getCollection('MigrationData').find({ processedTime: {$gt: new Date('03/12/2021').getTime()}}).count()
+	 
+	 
+	 
+	 "dateProp": { $gt: new Date('06/15/2016').getTime() }
+	 
+	 
+Query to get the list of processed data after certain time
+================================================================
+db.getCollection('MigrationData').find({ 	: { $gte: ISODate('2021-03-12')} }).count()	 
+	 
+	 
+db.getCollection('MigrationData').update({name: '1320711073-M1'}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting"}}, {multi: true})	
+
+db.getCollection('MigrationData').find({ 'type':/Inventor/ ,processedTime: { $gte: ISODate('2021-03-12')} }).count()
+
+
+db.getCollection('MigrationData').update({ 'type':/Inventor/ ,processedTime: { $gte: ISODate('2021-03-12')} }, {$set: {"stage":"PROCESS_INVENTOR","status":"complete","values.INVENTOR_PROCESSED_REVISIONS":""}}, {multi: true})	
+
+ 
+db.getCollection('MigrationData').update({ 'type':/Inventor Drawing/ ,processedTime: { $gte: ISODate('2021-03-12')} }, {$set: {"stage":"PROCESS_INVENTOR","status":"waiting","values.INVENTOR_PROCESSED_REVISIONS":""}}, {multi: true})	 
+	 
+	 
+db.getCollection('MigrationData').aggregate([
+{$match: { 'type':/Inventor Assembly/ ,processedTime: { $gte: ISODate('2021-03-13')} }},
+{$project: {level: 1, name: 1, type: 1}},
+{$sort : {level: -1}},
+],
+{allowDiskUse: true}
+)	 
+	 
+	 
+db.getCollection('MigrationData').aggregate([
+{$match: { 'type':/Inventor Assembly/ ,stage:"PROCESSED_DATA" }},
+{$project: {level: 1, name: 1, type: 1}},
+{$sort : {level: -1}},
+],
+{allowDiskUse: true}
+)
+db.getCollection('MigrationData').update({name: '1314040908-M1'}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting"}}, {multi: true})	
+	 
+	 
+db.getCollection('MigrationData_1').update({stage: 'PROCESSED_DATA',status:'complete'}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting"}}, {multi: true})	 
+
+db.getCollection('MigrationData_1').update({stage: 'PROCESSED_DATA',status:'complete'}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting"}}, {multi: true})
+
+db.getCollection('MigrationData_1').update({stage: 'IMPORT_EXTERNAL_RELATIONSHIP',status:'waiting'}, {$set: {processedTime: null,processor:null}}, {multi: true})
+
+
+db.getCollection('MigrationData').find({ type:/Inventor/,name:{$in: []} }).count()
+
+db.getCollection('MigrationData').update({stage: 'EXPORT_DATA_FROM_WINDCHILL',status:'waiting'}, {$set: { processor: null,'values.CREO_PROCESSED_REVISIONS':''}}, {multi: true})	
+db.getCollection('MigrationData').update({stage: 'EXPORT_DATA_FROM_WINDCHILL',status:'waiting'}, {$unset: {'CREO_PROCESSED_REVISIONS':''}}, {multi: true})	
+	 
+	 
+	 db.getCollection('MigrationData').update({stage: 'PROCESSED_DATA',status:'complete'}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting"}}, {multi: true})
+	 db.getCollection('MigrationData').update({stage: 'EXPORT_DATA_FROM_WINDCHILL',status:'waiting'}, {$set: { processor: null,logs: null}}, {multi: true})
+	 
+	 db.getCollection('MigrationData').update({stage: 'PROCESS_DATA',status:'waiting'}, {$set: {'importedObjects': null, processor: null,'importObjects':null}}, {multi: true})
+	 db.getCollection('MigrationData').update({stage: 'PROCESS_CREO'}, {$set: {'importedObjects': null, processor: null,'importObjects':null}}, {multi: true})
+	 db.getCollection('MigrationData').update({stage: 'EXPORT_DATA_FROM_WINDCHILL'}, {$set: {'importedObjects': null, processor: null,'importObjects':null}}, {multi: true})
+	 db.getCollection('MigrationData').update({stage: 'CHECK_CAD_DEPENDENCIES'}, {$set: {'importedObjects': null, processor: null,'importObjects':null}}, {multi: true})
+	 
+	 
+	 
+db.getCollection('MigrationData').aggregate([
+{$match: { 'values.MIGRATE_AS_TYPE':'Windchill ProE Assembly' ,stage:"PROCESSED_DATA" }},
+{$project: {level: 1, name: 1, type: 1 ,processedTime : 1}},
+{$sort : {level: -1}},
+],
+{allowDiskUse: true}
+)
+	 
+	 
+db.getCollection('MigrationData').update({ 'type':/ProE/ ,processedTime: { $gte: ISODate('2021-03-25')} }.count()	
+ 
+db.getCollection('MigrationData').update({"importedObjects.imported.relationships.targetObject.type":"Inventor Drawing",stage:"IMPORT_EXTERNAL_RELATIONSHIP"}, {$set: {status:"complete"}} {multi: true})
+
+
+
+db.getCollection('MigrationData').find({
+    name: '6970237949.PRT'
+}).forEach(function(doc){
+    if(doc.sourceObjects)
+    {
+        doc.sourceObjects.forEach(function(sourceObject){
+            if(sourceObject.files)
+            {
+                sourceObject.files.forEach(function(file){
+                    file.filepath=file.filepath.replace('\\ENGWDERC01.atlascopco.group\\', '\\ENGWDETE01.atlascopco.group\\temp\\');
+                })
+            }
+        })
+        db.getCollection('MigrationData').update({_id: doc._id}, {$set: {sourceObjects: doc.sourceObjects}})
+    }
+})
+
+
+
+db.getCollection('MigrationData').find({"values.CREO_FAILED_REVISIONS" : {"$exists" : true, "$ne" : ""}})
+
+
+
+db.getCollection('MigrationData').update({type:"ProE Assembly"}, 
+{$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting",logs:null}} {multi: true})
+
+
+
+db.getCollection('MigrationData').update({type:{ $in:["ProE Part,ProE Assembly,ProE Drawing,ProE Part Family Table,ProE Assembly Family Table,ProE Layout,ProE Format,ProE Manufacture"]}}, {$set: { 'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting",logs:null}}, {multi: true})
+
+
+db.getCollection('MigrationData').find({type:{ $nin:["ProE Part,ProE Assembly,ProE Drawing,ProE Part Family Table,ProE Assembly Family Table,ProE Layout,ProE Format,ProE Manufacture"]}}).count()
+
+
+
+db.getCollection('MigrationData').update({type:"ProE ProE"}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting",logs:null}}, {multi: true})
+
+
+db.getCollection('MigrationData').find({"values.CREO_FAILED_REVISIONS" : {"$exists" : true}})
+
+
+db.getCollection('MigrationData').find({"metric.operationMetrics.stage":"PROCESS_DATA",stage:"PROCESS_DATA"}).count()
+
+
+db.getCollection('MigrationData').update({"metric.operationMetrics.stage":"PROCESS_DATA",stage:"PROCESS_DATA"}, {$set: {"status":"complete"}}, {multi: true})
+db.getCollection('MigrationData').update({status:"complete",stage:"PROCESS_DATA"}, {$set: {"status":"waiting"}}, {multi: true})
+
+
+
+db.getCollection('MigrationData').remove({stage:"IMPORT_EXTERNAL_RELATIONSHIP",status:"complete"}})
+	
+db.getCollection('MigrationData').aggregate([
+{$match: { 'type':/Inventor Assembly/ ,stage:"PROCESSED_DATA" }},
+{$project: {level: 1, name: 1, type: 1}},
+{$sort : {level: -1}},
+],
+{allowDiskUse: true}
+)	
+	
+	
+db.getCollection('MigrationData').update({"values.CREO_FAILED_REVISIONS" : {"$exists" : true, "$ne" : ""},stage:"IMPORT_DATA"}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_CREO","status":"waiting",logs:null}}, {multi: true})
+
+	
+
+db.getCollection('MigrationData').update({type:"EBOM_Item","stage":"PROCESSED_DATA",status:"complete"}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"complete",logs:null}}, {multi: true})	
+
+
+db.getCollection('MigrationData').update({stage:"PROCESS_DATA",status:"complete"}, 
+{$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting",logs:null}}, {multi: true})
+
+
+db.getCollection('MigrationData').update({type:"ProE Assembly","stage":"PROCESSED_DATA",status:"complete"}, {$set: {'importedObjects': null, processor: null,'importObjects':null,"stage":"PROCESS_DATA","status":"waiting",logs:null}}, {multi: true})
